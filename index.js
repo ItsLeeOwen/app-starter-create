@@ -13,9 +13,9 @@ var cwd = process.cwd()
 var args = process.argv.slice(2)
 var dirname = args[0]
 
-console.log("  ::App Starter Start::  ", pkg.version)
+console.log("::", "Create App Starter version", pkg.version, ":")
 
-if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
+if (!dirname || "string" !== typeof dirname) {
   console.log(
     "project name required.  example:",
     "npx app-starter my-new-project"
@@ -23,13 +23,24 @@ if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
   return process.exit(1)
 }
 
-exec("npm install app-starter --loglevel error", { stdio: "inherit" })
+dirname = dirname.replace(/[^a-z0-9_-]/gi, "").trim()
+if (dirname.trim() === "") {
+  console.log(
+    "project name required.  example:",
+    "npx app-starter my-new-project"
+  )
+  return process.exit(1)
+}
+
+exec("npm install app-starter --prefix " + dirname + " --loglevel error", {
+  stdio: "inherit",
+})
 
 copyAppStarter()
 
 exec("npm start", { stdio: "inherit" })
 
-console.log("  ::App Starter End::  ", pkg.version)
+console.log("::", "Create App Starter Skończone", pkg.version, ":")
 
 function copyAppStarter() {
   try {
@@ -38,7 +49,7 @@ function copyAppStarter() {
     files.forEach(filepath => {
       fs.copySync(
         filepath,
-        filepath.replace("./node_modules/app-starter/", "./tmp/")
+        filepath.replace("./node_modules/app-starter/", "./" + dirname + "/")
       )
     })
   } catch (err) {
