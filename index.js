@@ -40,9 +40,9 @@ exec(`npm install app-starter --prefix ${dirname} --loglevel error`, {
 process.chdir(dirname)
 copyAppStarter()
 
-exec("npm start", { stdio: "inherit" })
-
 console.log(`  ::: Skończone ::: `)
+
+exec("npm start", { stdio: "inherit" })
 
 function copyAppStarter() {
   try {
