@@ -2,13 +2,13 @@
 
 //var Git = require("nodegit")
 // var fs = require("fs")
-//var exec = require("child_process").execSync
+var exec = require("child_process").execSync
 // var rimraf = require("rimraf")
 
 var args = process.argv.slice(2)
 var dirname = args[0]
 
-console.log("::App Starter::")
+console.log("::App Starter Start::")
 
 if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
   console.log(
@@ -17,6 +17,10 @@ if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
   )
   return process.exit(1)
 }
+
+exec("npm install --loglevel error", { stdio: "inherit" })
+
+console.log("::App Starter End::")
 
 // if (fs.existsSync(dirname)) {
 //   console.log("project already exists:", dirname)
