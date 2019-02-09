@@ -18,7 +18,7 @@ if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
   return process.exit(1)
 }
 
-exec("npm install --loglevel error", { stdio: "inherit" })
+exec("npm install app-starter --loglevel error", { stdio: "inherit" })
 
 console.log("::App Starter End::")
 
