@@ -4,7 +4,7 @@
   "version": "0.0.2",
   "description": "",
   "homepage": "https://github.com/ItsLeeOwen/app-starter-create",
-  "repository": "itsleeowen/create-app-starter",
+  "repository": "ItsLeeOwen/create-app-starter",
   "bin": {
     "create-app-starter": "./index.js"
   },
