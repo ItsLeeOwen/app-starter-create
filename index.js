@@ -13,7 +13,7 @@ var cwd = process.cwd()
 var args = process.argv.slice(2)
 var dirname = args[0]
 
-console.log("::", "Create App Starter version", pkg.version, ":")
+console.log(`  ::: Create App Starter v${pkg.version} ::: `)
 
 if (!dirname || "string" !== typeof dirname) {
   console.log(
@@ -24,6 +24,7 @@ if (!dirname || "string" !== typeof dirname) {
 }
 
 dirname = dirname.replace(/[^a-z0-9_-]/gi, "").trim()
+
 if (dirname.trim() === "") {
   console.log(
     "project name required.  example:",
@@ -32,25 +33,24 @@ if (dirname.trim() === "") {
   return process.exit(1)
 }
 
-exec("npm install app-starter --prefix " + dirname + " --loglevel error", {
+exec(`npm install app-starter --prefix ${dirname} --loglevel error`, {
   stdio: "inherit",
 })
 
+process.chdir(dirname)
 copyAppStarter()
 
 exec("npm start", { stdio: "inherit" })
 
-console.log("::", "Create App Starter Skończone", pkg.version, ":")
+console.log(`  ::: Skończone ::: `)
 
 function copyAppStarter() {
   try {
-    var files = glob.sync("./node_modules/app-starter/**/*", {})
+    var pathToAppStarter = `./node_modules/app-starter`
+    var files = glob.sync(`${pathToAppStarter}/**/*`, {})
 
     files.forEach(filepath => {
-      fs.copySync(
-        filepath,
-        filepath.replace("./node_modules/app-starter/", "./" + dirname + "/")
-      )
+      fs.copySync(filepath, filepath.replace(`${pathToAppStarter}/`, `./`))
     })
   } catch (err) {
     exitOnError(err)
