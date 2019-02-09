@@ -1,0 +1,26 @@
+{
+  "author": "github.com/ItsLeeOwen",
+  "name": "create-app-starter",
+  "version": "0.0.1",
+  "description": "",
+  "homepage": "https://github.com/ItsLeeOwen/app-starter-create",
+  "repository": "itsleeowen/create-app-starter",
+  "bin": {
+    "create-app-starter": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "files": [
+    "index.js"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "nodegit": "^0.24.0",
+    "rimraf": "^2.6.3"
+  },
+  "devDependencies": {}
+}
