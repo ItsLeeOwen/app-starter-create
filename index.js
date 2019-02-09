@@ -5,11 +5,15 @@
 var exec = require("child_process").execSync
 // var rimraf = require("rimraf")
 var pkg = require("./package.json")
+// var ncp = require("ncp").ncp
+var fs = require("fs-extra")
+var glob = require("glob")
 
+var cwd = process.cwd()
 var args = process.argv.slice(2)
 var dirname = args[0]
 
-console.log("::App Starter Start::", pkg.version)
+console.log("  ::App Starter Start::  ", pkg.version)
 
 if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
   console.log(
@@ -21,77 +25,28 @@ if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
 
 exec("npm install app-starter --loglevel error", { stdio: "inherit" })
 
-console.log("::App Starter End::", pkg.version)
+copyAppStarter()
 
-// if (fs.existsSync(dirname)) {
-//   console.log("project already exists:", dirname)
-//   return process.exit(1)
-// }
+exec("npm start", { stdio: "inherit" })
 
-// console.log("creating ", dirname)
+console.log("  ::App Starter End::  ", pkg.version)
 
-// Git.Clone("https://github.com/ItsLeeOwen/app-starter.git", dirname)
-//   .then(function() {
-//     process.chdir(dirname)
-//     ls()
+function copyAppStarter() {
+  try {
+    var files = glob.sync("./node_modules/app-starter/**/*", {})
 
-//     removeGitHistory(function() {
-//       npmInstallAndExit()
+    files.forEach(filepath => {
+      fs.copySync(
+        filepath,
+        filepath.replace("./node_modules/app-starter/", "./tmp/")
+      )
+    })
+  } catch (err) {
+    exitOnError(err)
+  }
+}
 
-//       // removeBinary(function() {
-//       //   npmInstallAndExit()
-//       // })
-//     })
-//   })
-//   .catch(exitOnError)
-
-// function removeGitHistory(cb) {
-//   if (!fs.existsSync(".git")) {
-//     exitOnError(new Error("expected .git"))
-//     return process.exit(1)
-//   }
-
-//   rimraf("./.git", function(err) {
-//     if (err) {
-//       return exitOnError(err)
-//     }
-//     cb()
-//   })
-// }
-
-// function removeBinary(cb) {
-//   if (!fs.existsSync("./index.js")) {
-//     exitOnError(new Error("expected index.js"))
-//     return process.exit(1)
-//   }
-
-//   rimraf("./index.js", function(err) {
-//     if (err) {
-//       return exitOnError(err)
-//     }
-//     cb()
-//   })
-// }
-
-// function npmInstallAndExit() {
-//   exec("npm i --loglevel warn", { stdio: "inherit" })
-//   console.log("you're good!")
-//   process.exit(0)
-// }
-
-// function exitOnError(err) {
-//   console.log(err)
-//   process.exit(1)
-// }
-
-// function ls() {
-//   console.log("ls")
-//   fs.readdirSync("./", (err, files) => {
-//     if (err) {
-//       return console.log(err)
-//     }
-//     files.forEach(file => {
-//       console.log(file)
-//     })
-//   })
-// }
+function exitOnError(err) {
+  console.error(err)
+  process.exit(1)
+}
