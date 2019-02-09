@@ -13,6 +13,11 @@ var cwd = process.cwd()
 var args = process.argv.slice(2)
 var dirname = args[0]
 
+var type = "master"
+if (args.length > 1 && "string" === typeof args[1]) {
+  type = args[1].toLowerCase()
+}
+
 console.log(`  ::: Create App Starter v${pkg.version} ::: `)
 
 if (!dirname || "string" !== typeof dirname) {
@@ -33,9 +38,30 @@ if (dirname.trim() === "") {
   return process.exit(1)
 }
 
-exec(`npm install app-starter --prefix ${dirname} --loglevel error`, {
-  stdio: "inherit",
-})
+switch (type) {
+  case "vanilla":
+    // exec(
+    //   `npm install app-starter@ItsLeeOwen/app-starter#vanilla --prefix ${dirname} --loglevel error`,
+    //   {
+    //     stdio: "inherit",
+    //   }
+    // )
+    exec(
+      `npm install app-starter@vanilla --prefix ${dirname} --loglevel error`,
+      {
+        stdio: "inherit",
+      }
+    )
+    break
+
+  default:
+    exec(
+      `npm install app-starter@master --prefix ${dirname} --loglevel error`,
+      {
+        stdio: "inherit",
+      }
+    )
+}
 
 process.chdir(dirname)
 copyAppStarter()
