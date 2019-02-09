@@ -4,11 +4,12 @@
 // var fs = require("fs")
 var exec = require("child_process").execSync
 // var rimraf = require("rimraf")
+var pkg = require("./package.json")
 
 var args = process.argv.slice(2)
 var dirname = args[0]
 
-console.log("::App Starter Start::")
+console.log("::App Starter Start::", pkg.version)
 
 if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
   console.log(
@@ -20,7 +21,7 @@ if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
 
 exec("npm install app-starter --loglevel error", { stdio: "inherit" })
 
-console.log("::App Starter End::")
+console.log("::App Starter End::", pkg.version)
 
 // if (fs.existsSync(dirname)) {
 //   console.log("project already exists:", dirname)
