@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 //var Git = require("nodegit")
-var fs = require("fs")
+// var fs = require("fs")
 //var exec = require("child_process").execSync
 // var rimraf = require("rimraf")
 
@@ -18,12 +18,12 @@ if (!dirname || "string" !== typeof dirname || dirname.trim() === "") {
   return process.exit(1)
 }
 
-if (fs.existsSync(dirname)) {
-  console.log("project already exists:", dirname)
-  return process.exit(1)
-}
+// if (fs.existsSync(dirname)) {
+//   console.log("project already exists:", dirname)
+//   return process.exit(1)
+// }
 
-console.log("creating ", dirname)
+// console.log("creating ", dirname)
 
 // Git.Clone("https://github.com/ItsLeeOwen/app-starter.git", dirname)
 //   .then(function() {
