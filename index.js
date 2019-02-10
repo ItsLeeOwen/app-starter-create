@@ -1,89 +1,69 @@
 #!/usr/bin/env node
 
-//var Git = require("nodegit")
-// var fs = require("fs")
-var exec = require("child_process").execSync
-// var rimraf = require("rimraf")
-var pkg = require("./package.json")
-// var ncp = require("ncp").ncp
-var fs = require("fs-extra")
-var glob = require("glob")
+const child = require("child_process")
+const pkg = require("./package.json")
+const fs = require("fs-extra")
 
-var cwd = process.cwd()
-var args = process.argv.slice(2)
-var dirname = args[0]
+const args = process.argv.slice(2)
 
-var type = "master"
+const EXEC_OPTIONS = { stdio: "inherit" }
+const REPO = "https://github.com/ItsLeeOwen/app-starter.git"
+
+let dirname = args[0]
+let type = "master"
 if (args.length > 1 && "string" === typeof args[1]) {
   type = args[1].toLowerCase()
 }
 
-console.log(`  ::: Create App Starter v${pkg.version} ::: `)
+console.log(`::: Create App Starter v${pkg.version} :::`)
 
 if (!dirname || "string" !== typeof dirname) {
-  console.log(
-    "project name required.  example:",
-    "npx app-starter my-new-project"
+  return exitOnError(
+    new Error(`project name required, example: npx app-starter my-new-app`)
   )
-  return process.exit(1)
 }
 
 dirname = dirname.replace(/[^a-z0-9_-]/gi, "").trim()
 
 if (dirname.trim() === "") {
-  console.log(
-    "project name required.  example:",
-    "npx app-starter my-new-project"
+  return exitOnError(
+    new Error(`project name required, example: npx app-starter my-new-app`)
   )
-  return process.exit(1)
+}
+
+if (fs.existsSync(dirname)) {
+  return exitOnError(new Error(`project name already in use: ${dirname}`))
 }
 
 switch (type) {
   case "vanilla":
-    // exec(
-    //   `npm install app-starter@ItsLeeOwen/app-starter#vanilla --prefix ${dirname} --loglevel error`,
-    //   {
-    //     stdio: "inherit",
-    //   }
-    // )
-    exec(
-      `npm install app-starter@vanilla --prefix ${dirname} --loglevel error`,
-      {
-        stdio: "inherit",
-      }
-    )
+    cloneRepo(dirname, "vanilla")
     break
 
   default:
-    exec(
-      `npm install app-starter@master --prefix ${dirname} --loglevel error`,
-      {
-        stdio: "inherit",
-      }
-    )
+    cloneRepo(dirname, "master")
 }
 
-process.chdir(dirname)
-copyAppStarter()
+child.execSync(`rm -rf ./${dirname}/.git`)
+npmInstall(dirname)
 
-console.log(`  ::: Skończone ::: `)
-
-exec("npm start", { stdio: "inherit" })
-
-function copyAppStarter() {
-  try {
-    var pathToAppStarter = `./node_modules/app-starter`
-    var files = glob.sync(`${pathToAppStarter}/**/*`, {})
-
-    files.forEach(filepath => {
-      fs.copySync(filepath, filepath.replace(`${pathToAppStarter}/`, `./`))
-    })
-  } catch (err) {
-    exitOnError(err)
-  }
+function npmInstall(dirname) {
+  child.execSync(
+    `npm install --loglevel error --prefix ${dirname}`,
+    EXEC_OPTIONS
+  )
+  console.log("ok ok")
+  process.exit(0)
 }
 
-function exitOnError(err) {
-  console.error(err)
+function cloneRepo(dirname, branch = "master") {
+  child.execSync(
+    `git clone --depth 1 --single-branch --branch ${branch} ${REPO} ${dirname}`,
+    EXEC_OPTIONS
+  )
+}
+
+function exitOnError(err = "an unknown error occured") {
+  console.log(err.toString())
   process.exit(1)
 }
