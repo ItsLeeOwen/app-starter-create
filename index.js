@@ -44,7 +44,7 @@ switch (type) {
     cloneRepo(dirname, "master")
 }
 
-child.execSync("rm -rf ./.git")
+child.execSync(`rm -rf ./${dirname}/.git`)
 npmInstall(dirname)
 
 function npmInstall(dirname) {
