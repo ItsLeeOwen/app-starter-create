@@ -40,6 +40,10 @@ switch (type) {
     cloneRepo(dirname, "vanilla")
     break
 
+  case "heroku":
+    cloneRepo(dirname, "heroku")
+    break
+
   default:
     cloneRepo(dirname, "master")
 }
