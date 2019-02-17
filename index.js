@@ -57,7 +57,7 @@ child.execSync("git add . && git commit -m 'initial commit.'")
 //child.execSync("hub create -d 'Another Excellent App Starter Project'")
 //child.execSync("git push origin master")
 
-npmInstall(dirname)
+//npmInstall(dirname)
 
 function npmInstall(dirname) {
   child.execSync(
