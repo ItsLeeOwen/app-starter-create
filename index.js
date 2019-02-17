@@ -50,18 +50,24 @@ switch (type) {
     cloneRepo(dirname, "master")
 }
 
-child.execSync(`rm -rf ./${dirname}/.git`)
+if (!chdir(dirname)) {
+  return
+}
+
+child.execSync(`rm -rf .git`)
 child.execSync("git init")
-child.execSync("git add . && git commit -m 'initial commit.'")
+child.execSync("git add . && git commit -m 'app started'")
+
 // hub requires auth prompts
 //child.execSync("hub create -d 'Another Excellent App Starter Project'")
 //child.execSync("git push origin master")
 
-//npmInstall(dirname)
+npmInstall(dirname)
 
 function npmInstall(dirname) {
   child.execSync(
-    `npm install --loglevel error --prefix ${dirname}`,
+    //    `npm install --loglevel error --prefix ${dirname}`,
+    `npm install --loglevel error`,
     EXEC_OPTIONS
   )
   process.exit(0)
@@ -77,6 +83,16 @@ function cloneRepo(dirname, branch = "master") {
 function exitOnError(err = "an unknown error occured") {
   console.log(err.toString())
   process.exit(1)
+}
+
+function chdir(dirname) {
+  try {
+    process.chdir(`./${dirname}`)
+    return true
+  } catch (err) {
+    console.error("chdir: " + err)
+    return err
+  }
 }
 
 function getGithubUsername() {
