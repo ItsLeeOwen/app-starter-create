@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+heroku container:login
+
+APP=$(heroku apps:info --json | jq -r '.app.name')
+
+read -p "Ready to deploy ${APP} to heroku? " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	heroku container:push web $(cat .env | grep -v "#" | xargs printf -- '--arg %s\n' | xargs)
+	heroku container:release web
+fi

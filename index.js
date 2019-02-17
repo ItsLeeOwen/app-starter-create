@@ -9,6 +9,8 @@ const args = process.argv.slice(2)
 const EXEC_OPTIONS = { stdio: "inherit" }
 const REPO = "https://github.com/ItsLeeOwen/app-starter.git"
 
+//const githubUsername = getGithubUsername()
+
 let dirname = args[0]
 let type = "master"
 if (args.length > 1 && "string" === typeof args[1]) {
@@ -49,6 +51,11 @@ switch (type) {
 }
 
 child.execSync(`rm -rf ./${dirname}/.git`)
+child.execSync("git init")
+child.execSync("git add . && git commit -m 'initial commit.'")
+child.execSync("hub create -d 'Another Excellent App Starter Project'")
+child.execSync("git push origin master")
+
 npmInstall(dirname)
 
 function npmInstall(dirname) {
@@ -56,7 +63,6 @@ function npmInstall(dirname) {
     `npm install --loglevel error --prefix ${dirname}`,
     EXEC_OPTIONS
   )
-  console.log("ok ok")
   process.exit(0)
 }
 
@@ -70,4 +76,16 @@ function cloneRepo(dirname, branch = "master") {
 function exitOnError(err = "an unknown error occured") {
   console.log(err.toString())
   process.exit(1)
+}
+
+function getGithubUsername() {
+  try {
+    return child.execSync("git config --global github.username").toString()
+  } catch (err) {
+    console.log(
+      "git config --global github.username is required, please add & try again:"
+    )
+    console.log('git config --global github.username "<YOUR GITHUB USERNAME>"')
+    //git config user.username "ItsLeeOwen"
+  }
 }
