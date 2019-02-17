@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+heroku container:login
+
+APP=$(heroku apps:info --json | jq -r '.app.name')
+
+docker build $(cat .env | grep -v "#" | xargs printf -- '--build-arg %s\n' | xargs) --build-arg NODE_ENV=development --tag registry.heroku.com/${APP}/web . && docker run -it registry.heroku.com/${APP}/web
