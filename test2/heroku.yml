@@ -1,7 +1,0 @@
-build:
-  config:
-    NODE_ENV: production
-    SASS_PATH: node_modules:src
-    PUBLIC_KEY_EXAMPLE: megafauna
-  docker:
-    web: Dockerfile
