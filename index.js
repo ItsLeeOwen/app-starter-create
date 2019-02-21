@@ -46,6 +46,10 @@ switch (type) {
     cloneRepo(dirname, "heroku")
     break
 
+  case "vue":
+    cloneRepo(dirname, "vue")
+    break
+
   default:
     cloneRepo(dirname, "master")
 }
